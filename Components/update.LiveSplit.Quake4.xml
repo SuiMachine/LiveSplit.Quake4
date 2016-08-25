@@ -1,0 +1,12 @@
+<updates>
+<update version="1.0.0">
+<files>
+<file path="Components/LiveSplit.Quake4.dll" status="changed"/>
+</files>
+<changelog>
+<change>
+Initial push
+</change>
+</changelog>
+</update>
+</updates>
