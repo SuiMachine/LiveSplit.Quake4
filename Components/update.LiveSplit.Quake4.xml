@@ -1,5 +1,5 @@
 <updates>
-<update version="1.0.0">
+<update version="0.9.0">
 <files>
 <file path="Components/LiveSplit.Quake4.dll" status="changed"/>
 </files>
