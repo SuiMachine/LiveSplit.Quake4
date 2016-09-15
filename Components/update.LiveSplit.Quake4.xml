@@ -1,4 +1,14 @@
 <updates>
+<update version="0.9.1">
+<files>
+<file path="Components/LiveSplit.Quake4.dll" status="changed"/>
+</files>
+<changelog>
+<change>Added isCutscene watching DeepPointer.</change>
+<change>Tied LastSplit to a isCutscene.</change>
+<change>Reworked Reset and Start timer to reset and start automatically once the cutscene starts playing.</change>
+</changelog>
+</update>
 <update version="0.9.0">
 <files>
 <file path="Components/LiveSplit.Quake4.dll" status="changed"/>

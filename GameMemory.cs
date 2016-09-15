@@ -62,6 +62,7 @@ namespace LiveSplit.Quake4
 
         private DeepPointer _isLoadingPtr;
         private DeepPointer _levelNamePtr;
+        private DeepPointer _isCutscenePtr;
 
         private static class LevelName
         {
@@ -121,6 +122,7 @@ namespace LiveSplit.Quake4
 
             _isLoadingPtr = new DeepPointer(0x507A35); // == 1 if a loadscreen is happening
             _levelNamePtr = new DeepPointer(0x507910);
+            _isCutscenePtr = new DeepPointer("gamex86.dll", 0x86EE74);
 
             resetSplitStates();
 
@@ -188,11 +190,12 @@ namespace LiveSplit.Quake4
                     while (!game.HasExited)
                     {
                         bool isLoading;
-                        bool isCutscene = false;
+                        bool isCutscene;
                         string streamGroupId = String.Empty;
                         _levelNamePtr.DerefString(game, 30, out streamGroupId);
                         streamGroupId = streamGroupId.ToLower();
                         _isLoadingPtr.Deref(game, out isLoading);
+                        _isCutscenePtr.Deref(game, out isCutscene);
 
                         if (streamGroupId != prevStreamGroupId && streamGroupId != null || prevIsCutscene != isCutscene)
                         {
@@ -316,16 +319,35 @@ namespace LiveSplit.Quake4
                             {
                                 Split(SplitArea.l30, frameCounter);
                             }
-                            else if (prevStreamGroupId == LevelName.l31_core2 && isCutscene)
+                            else if (streamGroupId == LevelName.l31_core2 && isCutscene)
                             {
                                 Split(SplitArea.l31, frameCounter);
                             }
-                        }
+                            else if (streamGroupId == LevelName.l01_airDefence1 && isCutscene == true && prevIsCutscene == false)
+                            {
+                                //Reset in game timer
+                                _uiThread.Post(d =>
+                                {
+                                    if (this.OnFirstLevelLoading != null)
+                                    {
+                                        this.OnFirstLevelLoading(this, EventArgs.Empty);
+                                    }
+                                }, null);
 
+                                // And instantly start it
+                                _uiThread.Post(d =>
+                                {
+                                    if (this.OnPlayerGainedControl != null)
+                                    {
+                                        this.OnPlayerGainedControl(this, EventArgs.Empty);
+                                    }
+                                }, null);
+                            }
+                        }
 
                         _isLoadingPtr.Deref(game, out isLoading);
 
-                        if (isLoading != prevIsLoading || isCutscene != prevIsCutscene)
+                        if (isLoading != prevIsLoading)
                         {
                             if (isLoading)
                             {
@@ -341,19 +363,6 @@ namespace LiveSplit.Quake4
                                         this.OnLoadStarted(this, EventArgs.Empty);
                                     }
                                 }, null);
-
-                                //This has to be placed somewhere else
-                                if (streamGroupId == LevelName.l01_airDefence1 && isCutscene)
-                                {
-                                    //reset game timer
-                                    _uiThread.Post(d =>
-                                    {
-                                        if (this.OnFirstLevelLoading != null)
-                                        {
-                                            this.OnFirstLevelLoading(this, EventArgs.Empty);
-                                        }
-                                    }, null);
-                                }
                             }
                             else
                             {
@@ -370,18 +379,6 @@ namespace LiveSplit.Quake4
                                             this.OnLoadFinished(this, EventArgs.Empty);
                                         }
                                     }, null);
-
-                                    if (streamGroupId == LevelName.l01_airDefence1)
-                                    {
-                                        // start game timer
-                                        _uiThread.Post(d =>
-                                        {
-                                            if (this.OnPlayerGainedControl != null)
-                                            {
-                                                this.OnPlayerGainedControl(this, EventArgs.Empty);
-                                            }
-                                        }, null);
-                                    }
                                 }
                             }
                         }
