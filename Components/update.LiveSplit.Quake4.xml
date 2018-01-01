@@ -1,4 +1,12 @@
 <updates>
+<update version="0.9.2">
+<files>
+<file path="Components/LiveSplit.Quake4.dll" status="changed"/>
+</files>
+<changelog>
+<change>Hopefully fixed Operation Last Hope split (mcc_2).</change>
+</changelog>
+</update>
 <update version="0.9.1">
 <files>
 <file path="Components/LiveSplit.Quake4.dll" status="changed"/>

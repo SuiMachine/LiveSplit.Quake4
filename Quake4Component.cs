@@ -119,7 +119,7 @@ namespace LiveSplit.Quake4
                 (split == GameMemory.SplitArea.l16 && this.Settings.sC16) ||
                 (split == GameMemory.SplitArea.l17 && this.Settings.sC17) ||
                 (split == GameMemory.SplitArea.l18 && this.Settings.sC18) ||
-                (split == GameMemory.SplitArea.l29 && this.Settings.sC19) ||
+                (split == GameMemory.SplitArea.l19 && this.Settings.sC19) ||
                 (split == GameMemory.SplitArea.l20 && this.Settings.sC20) ||
                 (split == GameMemory.SplitArea.l21 && this.Settings.sC21) ||
                 (split == GameMemory.SplitArea.l22 && this.Settings.sC22) ||
